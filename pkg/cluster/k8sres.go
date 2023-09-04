@@ -1833,6 +1833,8 @@ func (c *Cluster) generateSingleUserSecret(namespace string, pgUser spec.PgUser)
 		lbls = c.connectionPoolerLabels("", false).MatchLabels
 	}
 
+	uri := c.credentialSecretUri(pgUser.Name, pgUser.Password)
+
 	secret := v1.Secret{
 		ObjectMeta: metav1.ObjectMeta{
 			Name:        c.credentialSecretName(username),
@@ -1844,6 +1846,7 @@ func (c *Cluster) generateSingleUserSecret(namespace string, pgUser spec.PgUser)
 		Data: map[string][]byte{
 			"username": []byte(pgUser.Name),
 			"password": []byte(pgUser.Password),
+			"uri":      []byte(uri),
 		},
 	}
 

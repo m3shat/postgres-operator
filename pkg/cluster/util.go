@@ -573,6 +573,17 @@ func (c *Cluster) credentialSecretNameForCluster(username string, clusterName st
 		"tprgroup", acidzalando.GroupName)
 }
 
+func (c *Cluster) credentialSecretUri(username string, password string) string {
+	return c.credentialSecretUriForCluster(username, password, c.Name)
+}
+
+func (c *Cluster) credentialSecretUriForCluster(username string, password string, clusterName string) string {
+	return c.OpConfig.SecretUriTemplate.Format(
+		"username", username,
+		"password", password,
+		"cluster", clusterName)
+}
+
 func cloneSpec(from *acidv1.Postgresql) (*acidv1.Postgresql, error) {
 	var (
 		buf    bytes.Buffer
